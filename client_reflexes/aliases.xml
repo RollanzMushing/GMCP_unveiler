@@ -1,0 +1,384 @@
+<aliases>
+  <alias
+   match="^gmcpAffsAddUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringAffsAdd") or ""))()
+
+--gmcp_affsAdd
+gmcp = gmcp or {}
+gmcp.my_affs=gmcp.my_affs or {}
+
+gmcp.my_affs[gmcp_affsAdd.name]=true
+
+--[[
+if gmcp.my_affs.prone==true then
+  on_prone()
+end
+]]
+
+</send>
+  </alias>
+  <alias
+   match="^gmcpAffsRemoveUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringAffsRemove") or ""))()
+
+--gmcp_affsRemove
+--print("affs remove")
+
+gmcp=gmcp or {}
+gmcp.my_affs = gmcp.my_affs or {}
+affs_to_remove={}
+
+--this step may be redundant, unless intermediate processing is necessary
+
+for k,v in ipairs(gmcp_affsRemove) do
+  affs_to_remove[k]=v
+end
+
+for i,v in ipairs(affs_to_remove) do
+  gmcp.my_affs[v]=nil
+end
+
+--needs some more thought & experimentation on how to handle afflictions which have different levels (e.g. burning)
+
+--on_affs_remove()
+if gmcp.my_affs.prone==true then
+  on_prone()
+end</send>
+  </alias>
+  <alias
+   match="^gmcpAffsUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringAffs") or ""))()
+
+--print("populating my_affs")
+--print("affs updated")
+gmcp = gmcp or {}
+
+gmcp.my_affs={}
+for k,v in ipairs(gmcp_affs) do
+ gmcp.my_affs[v.name] = true
+end
+
+--[[
+if gmcp.my_affs.prone==true then
+  on_prone()
+end
+]]
+--[[
+require "tprint"
+tprint(my_affs)
+]]</send>
+  </alias>
+  <alias
+   match="^gmcpDefsAddUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringDefsAdd") or ""))()
+
+--gmcp_defsAdd
+gmcp = gmcp or {}
+gmcp.my_defs = gmcp.my_defs or {}
+gmcp.my_defs[gmcp_defsAdd.name]=true</send>
+  </alias>
+  <alias
+   match="^gmcpDefsRemoveUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringDefsRemove") or ""))()
+gmcp=gmcp or {}
+gmcp.my_defs=gmcp.my_defs or {}
+defs_to_remove={}
+
+for k,v in ipairs(gmcp_defsRemove) do
+defs_to_remove[k]=v
+end
+
+for i,v in ipairs(defs_to_remove) do
+  gmcp.my_defs[v]=nil
+end</send>
+  </alias>
+  <alias
+   match="^gmcpDefsUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringDefs") or ""))()
+
+gmcp = gmcp or {}
+gmcp.my_defs={}
+
+for k,v in ipairs(gmcp_defs) do
+  gmcp.my_defs[v.name]=true
+end
+
+--tprint(my_defs)</send>
+  </alias>
+  <alias
+   match="^gmcpItemsAddUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringItemsAdd") or ""))()
+
+--gmcp_itemsAdd
+
+room_items=room_items or {}
+inv_items=inv_items or {}
+
+if gmcp_itemsAdd.location=="room" then
+  room_items[gmcp_itemsAdd.item.id]=gmcp_itemsAdd.item.name
+elseif gmcp_itemsAdd.location=="inv" then
+  inv_items[gmcp_itemsAdd.item.id]=gmcp_itemsAdd.item.name
+--elseif gmcp_itemsAdd.location==repNumber
+--to work out later
+
+end</send>
+  </alias>
+  <alias
+   match="^gmcpItemsRemoveUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringItemsRemove") or ""))()
+
+--gmcp_itemsRemove
+
+room_items=room_items or {}
+inv_items=inv_items or {}
+
+if gmcp_itemsRemove.location=="room" then
+  room_items[gmcp_itemsRemove.item.id]=nil
+elseif gmcp_itemsRemove.location=="inv" then
+  inv_items[gmcp_itemsRemove.item.id]=nil
+--elseif gmcp_itemsRemove.location==repNumber
+--to work out later
+
+end</send>
+  </alias>
+  <alias
+   match="^gmcpItemsUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringInv") or ""))()
+
+--gmcp_items
+--still need to make sure inv is updating correctly
+
+if gmcp_items.location=="room" then
+  room_items={}
+  for k,v in ipairs(gmcp_items.items) do
+    room_items[v.id]=v.name
+  end
+elseif gmcp_items.location=="inv" then
+  inv_items={}
+  for k,v in ipairs(gmcp_items.items) do
+    inv_items[v.id]=v.name
+  end
+
+--elseif gmcp_items.location==repNumber
+--need to work out the wildcard, etc
+end</send>
+  </alias>
+  <alias
+   match="^gmcpItemsUpdateUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringItemsUpdate") or ""))()
+
+--gmcp_itemsUpdate
+--not sure what I want to do with this yet</send>
+  </alias>
+  <alias
+   match="^gmcpRiftChangeUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringRiftChange") or ""))()
+
+--gmcp_riftChange
+
+--gmcp_riftChange.amount and gmcp_riftChange.name are the useful data</send>
+  </alias>
+  <alias
+   match="^gmcpRiftListUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringRiftList") or ""))()
+
+--gmcp_riftList
+--haven't experimented with this yet as I haven't set up sending IRE.Rift.Request</send>
+  </alias>
+  <alias
+   match="^gmcpRoomAddPlayerUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringRoomAddPlayer") or ""))()
+
+--gmcp_roomAddPlayer
+
+roomPlayers=roomPlayers or {}
+
+table.insert(roomPlayers, gmcp_roomAddPlayer.name)</send>
+  </alias>
+  <alias
+   match="^gmcpRoomPlayersUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringRoomPlayers") or ""))()
+
+--gmcp_roomPlayers
+roomPlayers={}
+
+for k,v in ipairs(gmcp_roomPlayers) do
+  roomPlayers[k]=v.name
+end</send>
+  </alias>
+  <alias
+   match="^gmcpRoomRemovePlayerUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>gmcp_roomRemovePlayer=GetPluginVariable(plugin_GMCPUnveiler_id,"stringRoomRemovePlayer")
+
+--print(roomRemovePlayer.." has left the room")
+
+roomPlayers=roomPlayers or {}
+
+for k,v in ipairs(roomPlayers) do
+  if v==gmcp_roomRemovePlayer then
+    table.remove(roomPlayers,k)
+    break
+  end
+end</send>
+  </alias>
+  <alias
+   match="^gmcpStatusUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringStatus") or ""))()
+
+if my_class~=gmcp_status["class"] then
+  --[[
+  if my_class=="Sentinel" and gmcp_status["class"]=="Black Dragon" then
+    print("changed from sentinel to dragon")
+  else
+    print("changed from dragon to sentinel")
+  end
+	]]
+end
+my_class=gmcp_status["class"]</send>
+  </alias>
+  <alias
+   match="^gmcpStatusVarsUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringStatusVars") or ""))()</send>
+  </alias>
+  <alias
+   match="^gmcpVitalsUpdate$"
+   enabled="y"
+   group="gmcp"
+   regexp="y"
+   send_to="12"
+   keep_evaluating="y"
+   sequence="100"
+  >
+  <send>assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringVitals") or ""))()
+
+assert(loadstring(GetPluginVariable(plugin_GMCPUnveiler_id,"stringStatsArray") or ""))()
+
+--gmcp_vitals
+gmcp = gmcp or {}
+
+maxHealth=gmcp_vitals.hp.max
+
+--gmcp_statsArray
+gmcp.my_rage=tonumber(gmcp_statsArray.Rage)
+</send>
+  </alias>
+</aliases>
